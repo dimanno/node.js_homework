@@ -13,7 +13,6 @@ const readF = ()=>{
         console.log(users);
         return users
     })
-
 }
 
 module.exports = {

@@ -1,8 +1,10 @@
 const  bd = require('../database/users.json');
 const fs = require('fs');
 const read = require('../actions/users.actions')
+const path = require('path')
 
 const usersPath = '/home/bigbird/WebstormProjects/dimanno/node.js_homework/database/users.json';
+// const userP = path.join(__dirname, '..', 'database', 'users.json')
 
 module.exports = {
     getUsers: (req, res)=> {
