@@ -3,7 +3,7 @@ const path = require('path');
 
 const usersPath = '/home/bigbird/WebstormProjects/dimanno/node.js_homework/database/users.json';
 
-const readUsers = ()=>{
+const readF = ()=>{
     fs.readFile(usersPath, (err,data)=>{
         if (err) {
             console.log(err)
@@ -14,4 +14,8 @@ const readUsers = ()=>{
         return users
     })
 
+}
+
+module.exports = {
+    readF
 }

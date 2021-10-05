@@ -1,4 +1,4 @@
-module.exports = [
+users = [
     {
         id: 1,
         name: 'Andriy',
@@ -72,3 +72,5 @@ module.exports = [
         age: 28
     }
 ];
+
+users.slice(-1).id +1
