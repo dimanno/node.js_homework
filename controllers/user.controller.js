@@ -1,11 +1,12 @@
 const  db = require('../database/users');
 const fs = require('fs');
+const path = require('path');
 
-const databasePath = '/home/bigbird/WebstormProjects/dimanno/node.js_homework/database/users';
+const usersPath = '/home/bigbird/WebstormProjects/dimanno/node.js_homework/database/users.json';
 
 module.exports = {
     getUsers: (req, res)=> {
-        fs.readFile(databasePath, (err,data)=>{
+        fs.readFile(usersPath, (err,data)=>{
             if (err) {
                 console.log(err)
             }
@@ -15,27 +16,48 @@ module.exports = {
             res.json(users)
         })
     },
-    getUserById: (req, res)=> {
-        const {user_id} = req.params
-        const userById = db[user_id - 1];
-        res.json(userById)
-    },
-    postUsers: (req, res)=> {
-        console.log(req.body);
-        const newUser = {...req.body, id: db.length + 1};
 
-        fs.writeFile(databasePath, newUser, (err)=>{
+    getUserById: (req, res)=> {
+        const {user_id} = req.params;
+        fs.readFile(path.join(usersPath), (err, data)=>{
             if (err) {
                 console.log(err)
             }
+            let userJSON = data.toString()
+            const user = JSON.parse(userJSON);
+            const userById = user[user_id - 1];
+            console.log(userById)
+            res.json(userById)
         })
-
-        res.json(db)
     },
+
+    postUsers: (req, res)=> {
+        fs.readFile(usersPath, (err,data)=> {
+            if (err) {
+                console.log(err)
+            } else {
+                let usersJSON = data.toString()
+                const users = JSON.parse(usersJSON);
+
+                console.log({...req.body, id: db.length + 1});
+                users.push({...req.body, id: db.length + 1});
+
+                fs.writeFile(usersPath, JSON.stringify(users), (err) => {
+                    if (err) {
+                        console.log(err)
+                    }
+                })
+            }
+        })
+    },
+
     putUsers: (req, res)=>{
         res.json("Update users")
     },
+
     deleteUsers: (req, res)=>{
         res.json("Delete users")
     }
 }
+
+
