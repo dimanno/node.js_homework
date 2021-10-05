@@ -2,21 +2,14 @@ const  bd = require('../database/users.json');
 const fs = require('fs');
 const read = require('../actions/users.actions')
 const path = require('path')
+const {readF} = require("../actions/users.actions");
 
-const usersPath = '/home/bigbird/WebstormProjects/dimanno/node.js_homework/database/users.json';
-// const userP = path.join(__dirname, '..', 'database', 'users.json')
+const usersPath = path.join(__dirname, '..', 'database', 'users.json')
 
 module.exports = {
     getUsers: (req, res)=> {
-        fs.readFile(usersPath, (err,data)=> {
-            if (err) {
-                console.log(err)
-            }
-            let usersJSON = data.toString()
-            const users = JSON.parse(usersJSON);
-            console.log(users);
-            res.json(users)
-        })
+        read.readF()
+        res.json()
     },
 
     getUserById: (req, res)=> {

@@ -1,10 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 
-const usersPath = '/home/bigbird/WebstormProjects/dimanno/node.js_homework/database/users.json';
+const usersPath = path.join(__dirname, '..', 'database', 'users.json')
 
 const readF = ()=>{
-    fs.readFile(usersPath, (err,data)=>{
+    return fs.readFile(usersPath, (err,data)=>{
         if (err) {
             console.log(err)
         }
