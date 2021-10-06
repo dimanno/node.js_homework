@@ -33,8 +33,28 @@ module.exports = {
             });
     },
 
-    putUsers: (req, res)=>{
-        res.json("Update users")
+    updateUsers: (req, res)=>{
+        read.readF()
+            .then(users => {
+                const editUsers = users.map(user => {
+                    const {user_id} = req.params
+                    if (user.id === +user_id) {
+                        return {
+                            id: user.id,
+                            name: user.name,
+                            gender: user.gender,
+                            age: user.age,
+                        }
+                    }
+                    return user
+                })
+                return read.writeF(editUsers)
+            })
+            .then(() => res.json('succeeded'))
+            .catch(err => {
+                console.log(err);
+                res.json('failed');
+            });
     },
 
     deleteUsers: (req, res)=>{
@@ -51,17 +71,15 @@ module.exports = {
             });
     },
 
-    deleteUserById: (req, res) => {
+    deleteUser: (req, res) => {
         read.readF()
             .then(users => {
             const {user_id} = req.params
-            const updateUsers = users.filter(user=> user.id !== user_id)
-
+                console.log(user_id)
+            const updateUsers = users.filter(user => user.id !== +user_id);
             return read.writeF(updateUsers)
         })
-            .then(()=>{
-                res.json('user deleted')
-            })
+            .then(() => res.json('succeed'))
             .catch(err => {
             console.log(err);
             res.json('something wrong');
