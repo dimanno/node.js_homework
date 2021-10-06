@@ -4,17 +4,30 @@ const path = require('path');
 const usersPath = path.join(__dirname, '..', 'database', 'users.json')
 
 const readF = ()=>{
-    return fs.readFile(usersPath, (err,data)=>{
-        if (err) {
-            console.log(err)
-        }
-        let usersJSON = data.toString()
-        const users = JSON.parse(usersJSON);
-        console.log(users);
-        return users
+    return new Promise ((resolve, reject) => {
+        fs.readFile(usersPath, (err,data)=>{
+            if (err) {
+                reject(err)
+            }
+            let usersJSON = data.toString()
+            const users = JSON.parse(usersJSON);
+            resolve(users)
+        })
+    })
+}
+
+const writeF = users => {
+    return new Promise((resolve, reject) => {
+        fs.writeFile(usersPath, JSON.stringify(users), (err) => {
+            if (err) {
+                reject(err);
+            }
+            resolve();
+        })
     })
 }
 
 module.exports = {
-    readF
+    readF,
+    writeF
 }

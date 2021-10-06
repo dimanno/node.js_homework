@@ -1,51 +1,36 @@
 const  bd = require('../database/users.json');
-const fs = require('fs');
 const read = require('../actions/users.actions')
-const path = require('path')
-const {readF} = require("../actions/users.actions");
-
-const usersPath = path.join(__dirname, '..', 'database', 'users.json')
 
 module.exports = {
     getUsers: (req, res)=> {
-        read.readF()
-        res.json()
-    },
+        read.readF().then(users => res.json(users))},
 
     getUserById: (req, res)=> {
-        fs.readFile(usersPath, (err,data)=> {
-            if (err) {
-                console.log(err)
-            }
-            let usersJSON = data.toString()
-            const users = JSON.parse(usersJSON);
-
-            const {user_id} = req.params;
-            const userById = users[user_id - 1];
-            console.log(userById)
-            res.json(userById)
+        read.readF()
+            .then(users => {
+                const {user_id} = req.params;
+                const userById = users[user_id - 1]
+                res.json(userById)
         })
+            .catch(err => {
+                console.log(err);
+                res.json('something wrong');
+            });
     },
 
     postUsers: (req, res)=> {
-        fs.readFile(usersPath, (err,data)=> {
-            if (err) {
-               return  console.log(err)
-            } else {
-                let usersJSON = data.toString()
-                const users = JSON.parse(usersJSON);
-
-                console.log({...req.body, id: bd[bd.length - 1].id + 1});
-                users.push({...req.body, id: bd[bd.length - 1].id + 1});
-
-                fs.writeFile(usersPath, JSON.stringify(users), (err) => {
-                    if (err) {
-                        console.log(err)
-                    }
-                })
-            }
+        read.readF()
+            .then((users) => {
+                const id = bd[bd.length - 1].id + 1;
+                const newUser = {id, ...req.body}
+                users.push(newUser);
+            return read.writeF(users);
         })
-        res.json(bd);
+            .then(() => res.json('succeed'))
+            .catch(err => {
+                console.log(err);
+                res.json('something wrong');
+            });
     },
 
     putUsers: (req, res)=>{
@@ -53,24 +38,34 @@ module.exports = {
     },
 
     deleteUsers: (req, res)=>{
-        fs.readFile(usersPath, (err,data)=> {
-            if (err) {
-                return console.log(err)
-            } else {
-                let usersJSON = data.toString()
-                const users = JSON.parse(usersJSON);
-                while (users.length > 0) {
-                    users.pop()
-                }
-
-                fs.writeFile(usersPath, JSON.stringify(users), (err) => {
-                    if (err) {
-                        console.log(err)
-                    }
-                })
+        read.readF().then(users => {
+            while (users.length > 0) {
+                users.pop()
             }
+            return read.writeF(users)
         })
-        res.json(bd)
+            .then(() => res.json('BD is empty'))
+            .catch(err => {
+                console.log(err);
+                res.json('something wrong');
+            });
+    },
+
+    deleteUserById: (req, res) => {
+        read.readF()
+            .then(users => {
+            const {user_id} = req.params
+            const updateUsers = users.filter(user=> user.id !== user_id)
+
+            return read.writeF(updateUsers)
+        })
+            .then(()=>{
+                res.json('user deleted')
+            })
+            .catch(err => {
+            console.log(err);
+            res.json('something wrong');
+        });
     }
 }
 
