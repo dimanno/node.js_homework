@@ -44,8 +44,8 @@ module.exports = {
 
     loginUser: async (req, res) => {
         try {
-            const {login} = await req.body;
-            res.json(`Hello ${login}`);
+            const {name} = await req.body;
+            res.json(`Hello ${name}`);
         } catch (e) {
             res.json(e.message);
         }
