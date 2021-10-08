@@ -1,4 +1,3 @@
-// const read = require('../actions/users.actions');
 const User = require('../database/User');
 
 module.exports = {
