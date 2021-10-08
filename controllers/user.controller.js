@@ -32,6 +32,19 @@ module.exports = {
         }
     },
 
+    updateUsers: async (req, res) => {
+        try {
+            const {user_id, name} = req.params;
+            const user = await User.findByIdAndUpdate(user_id, name);
+            const editUser = {
+                name: user.name,
+            };
+            res.json(editUser);
+        } catch (e) {
+            res.json(e.message);
+        }
+    },
+
     deleteUser: async (req, res) => {
         try {
             const {user_id} = req.params;
