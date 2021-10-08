@@ -4,6 +4,5 @@ const userMiddleware = require('../middleware/user.middleware');
 
 router.get('/', userController.getUsers);
 router.post('/', userMiddleware.createUserMiddleware, userController.postUsers);
-// router.delete('/', userController.deleteUsers);
 
 module.exports = router;

@@ -4,7 +4,6 @@ module.exports = {
     createUserMiddleware: async (req, res, next) => {
         try {
             const userByEmail = await User.findOne({email: req.body.email});
-            console.log(req.body.email);
             if (userByEmail) {
                 throw new Error('email already exist');
             }
@@ -12,5 +11,6 @@ module.exports = {
         } catch (e) {
             res.json(e.message);
         }
-    }
+    },
 };
+
