@@ -1,8 +1,9 @@
 const router = require('express').Router();
 const userController = require('../controllers/user.controller');
+const userMiddleware = require('../middleware/user.middleware');
 
 router.get('/', userController.getUsers);
-router.post('/', userController.postUsers);
-router.delete('/', userController.deleteUsers);
+router.post('/', userMiddleware.createUserMiddleware, userController.postUsers);
+// router.delete('/', userController.deleteUsers);
 
 module.exports = router;
